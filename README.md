@@ -40,7 +40,7 @@ and you should have **Helm** installed
 
 We'are going to use a microservice application provided by google (for learning pusposes)
 
-This is the repository: [https://github.com/GoogleCloudPlatform/microservices-demo]
+This is the repository: [https://github.com/mahdibouaziz/microservices-demo-google]
 
 just clone it and run:
 
@@ -99,4 +99,35 @@ we have also pod, services, secrets, configmaps, ....
 
 we have another interesting things that get created `CRD`
 
-#
+# Data Visualization
+
+We want to notice when something **unexpected** happens, Observe any **anomalies**
+
+- CPU spikes
+- High Load
+- Insufficient storage
+- Unauthorized Requests
+
+## Prometheus Web UI
+
+We need to expose this service `monitoring-kube-prometheus-prometheus` to be able to see the Prometheus Web UI, to do that:
+
+`kubectl patch svc monitoring-kube-prometheus-prometheus -p '{"spec": {"type": "NodePort"}}' -n monitoring`
+
+and this is the UI:
+![Alt text](./images/Prometheus%20Web%20UI.png?raw=true)
+
+This is a simple UI, but it can be useful for getting some of the basic information about the cluster
+
+To get the **targets** that Prometheus is monitoring: `Status` -> `Targets`
+
+You need to add the **target**, which you want to monitor
+
+You can check if the data you want to observe is available or not by searching it on the `Expression` on the main page of Prometheus
+
+NOTES:
+
+- **Instace** = an endpoint you can scrape
+- **Job** = Collection of Instances with the same purpose.
+
+## Grafana
