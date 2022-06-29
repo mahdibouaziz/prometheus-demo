@@ -29,10 +29,10 @@ This is the best option to set-up Prometheus.
 We Assume that we have 4 Ubuntu, The Kubernetes is installed and the `nfsserver1` host in the same network with the cluster :
 | Role | Hostname | IP address |
 | ---------- | ---------------- | --------------- |
-| Master | kubemaster | 192.168.56.2/24 |
-| Worker | kubenode01 | 192.168.56.3/24 |
-| Worker | kubenode02 | 192.168.56.4/24 |
-| NFS Server | nfsserver1 | 192.168.56.81/24 |
+| Master | kubemaster | 192.168.56.18/24 |
+| Worker | kubenode01 | 192.168.56.19/24 |
+| Worker | kubenode02 | 192.168.56.20/24 |
+| NFS Server | nfsserver1 | 192.168.56.25/24 |
 
 and you should have **Helm** installed
 
@@ -74,6 +74,29 @@ verify the deployment:
 
 `kubectl get all -n monitoring`
 
+![Alt text](./images/all-prometheus-stack.png?raw=true)
+
 # Understanding Prometheus Stack Components
 
-(7:16)
+We have 2 **StatefulSet**:
+
+- `prometheus-monitoring-kube-prometheus-prometheus` the Promethes Server itself, this is gonna be managed by the `Operator`
+- `alertmanager-monitoring-kube-prometheus-alertmanager`
+
+We have 3 **Deployements**:
+
+- `monitoring-kube-state-metrics` : Created rometheus and Alertmanager StatefulSet
+- `monitoring-kube-prometheus-operator` : its own Helm chart (dependency of this Helm chart) and it scrapes K8s components metrics (monitor the health of deployments, Statefulsets, Pods, .... inside the cluster)
+- `monitoring-grafana`
+
+We have 1 **DeamonSet** (runs on each node):
+
+- `monitoring-prometheus-node-exporter`: Translates Worker Node metrics to Prometheus metrics
+
+we have also pod, services, secrets, configmaps, ....
+
+==> we have setup a **monitoring stack** + we get **by default** a **monitoring configuration for the K8s cluster** for our **Worker Nodes and K8s Components**
+
+we have another interesting things that get created `CRD`
+
+#
