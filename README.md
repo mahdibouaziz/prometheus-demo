@@ -131,3 +131,65 @@ NOTES:
 - **Job** = Collection of Instances with the same purpose.
 
 ## Grafana
+
+Grafana is a Data Visualization tool that can access Prometheus metrics and gives us a nice visualization.
+
+In the Prometheus Stack deployed, we already have Grafana deployed, we just need to expose the `monitoring-grafana` service to a NodePort.
+
+`kubectl patch svc monitoring-grafana -p '{"spec": {"type": "NodePort"}}' -n monitoring`
+
+Then you can access, The defualt credentials are:
+
+- username: `admin `
+- password: `prom-operator`
+
+this is the UI:
+![Alt text](./images/graphanaUI.png?raw=true)
+
+An example of Dashboards:
+![Alt text](./images/graphana%20dashboard%20example.png?raw=true)
+
+### Grafana Dashboards:
+
+- Dashboard is a set of one or more **panels**
+- You can create your own Dashboards
+- Organized into one or more rows
+- **Row** is a logical divider within a dashboard
+- **Rows** are used to group **panels** together
+- **Panel** is the basic visualization building block in Grafana, composed by a query and a visualization.
+- A panel can be moved and resized within a dashboard.
+
+### Configure Users in Grafana
+
+to configure users you just go to `Configuration` -> `Users`
+
+# Create fake workloads to our application (to the frontend) - for testing purposes
+
+let's create a pod that will do those requests for us:
+
+`kubectl run curl-test --image=radial/busyboxplus:curl -i --tty --rm`
+
+and inside the pod let's fake 200 requests:
+
+`vi request.sh`
+
+write this script:
+
+```sh
+for i in $(seq 1 200)
+do
+  curl [serviceName] > result.txt
+done
+```
+
+Note: in our case the serviceName is `frontend`
+
+make the script executable
+
+`chmod +x request.sh`
+
+and then execute it
+
+`./request.sh`
+
+finally go check your Grafana dashboards.
