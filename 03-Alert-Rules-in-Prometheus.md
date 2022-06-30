@@ -37,3 +37,81 @@ an alert rule example:
 ![Alt text](./images/alert-rule.png?raw=true)
 
 # Create our own `Alert Rules`
+
+## Create an alert rule when the CPU usage > 50%
+
+```yaml
+name: HostHighCpuLoad
+expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[2m])) * 100) > 50
+for: 2m
+labels:
+  severity: warning
+  namespace: monitoring
+annotations:
+  description: "CPU load on host is over 50% \n  The Value = {{ $value }} \n Instance = {{ $labels.instance }} \n"
+  summary: "Host CPU load high"
+```
+
+let's discuss about the expression:
+
+- we have a metric: `node_cpu_seconds_total`
+- this metric has a lot of modes (`iowait`, `system`, `idle`, ...)
+- we've selected the mode `idle` and that means that the CPU is _not being used_
+- and then we get the rate (avearge utilization) per second over a period of 2 minutes `rate( ..... [2m])`
+- finnaly because we want to measure the CPU usage per host we added `avg by (instance)`
+
+## add our alert rules to Prometheus
+
+We have Prometheus running in K8s cluster as `Prometheus Operator`.
+
+Prometheus Operator extends the K8s API and let us create `Custom Kuberentes Components` defined by `CRDs`.
+
+==> to add this alert rule to Prometheus, we just need to create the manifest file with the custom `apiVersion` and `kind` and just apply it.
+
+```yaml
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: main-rules
+  namespace: monitoring
+  #these labels are required to Prometheus operator to be able to triger the rules
+  labels:
+    app: kube-prometheus-stack
+    release: monitoring
+spec:
+  groups:
+    - name: main.rules
+      rules:
+        - alert: HostHighCpuLoad
+          expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[2m])) * 100) > 50
+          for: 2m
+          labels:
+            severity: warning
+            namespace: monitoring
+          annotations:
+            description: "CPU load on host is over 50% \n  The Value = {{ $value }} \n Instance = {{ $labels.instance }} \n"
+            summary: "Host CPU load high"
+
+        # A group is an array of rules ==> let's create a second alert rule when the Pod cannot start:
+        - alert: KubernetesPodCrashLooping
+          expr: kube_pod_container_status_restarts_total > 5
+          for: 0m
+          labels:
+            severity: critical
+            namespace: monitoring
+          annotations:
+            description: "Pod {{ $labels.pod }} is crash looping \n  The Value = {{ $value }}"
+            summary: "Kubernetes Pod crash looping"
+```
+
+now we just need to apply our manifest file:
+
+`kubectl apply -f custom-alert-rules.yaml`
+
+`kubectl get PrometheusRule -n monitoring`
+
+![Alt text](./images/custom-rule.png?raw=true)
+
+FInally, we are able to see these rules in the Prometheus UI:
+
+![Alt text](./images/custom-rule-ui.png?raw=true)
