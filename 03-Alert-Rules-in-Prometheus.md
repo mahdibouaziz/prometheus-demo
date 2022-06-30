@@ -112,6 +112,16 @@ now we just need to apply our manifest file:
 
 ![Alt text](./images/custom-rule.png?raw=true)
 
-FInally, we are able to see these rules in the Prometheus UI:
+Finally, we are able to see these rules in the Prometheus UI:
 
 ![Alt text](./images/custom-rule-ui.png?raw=true)
+
+# Test our custom `Alert Rules`
+
+we are going to trigger the High CPU load condition and see the alert gets fired ==> simulate a CPU load in the cluster.
+
+This will similate a CPU test:
+
+`kubectl run cpu-test --image=containerstack/cpustress -- --cpu 4 --timeout 30s --metrics-brief`
+
+![Alt text](./images/alert-pending.png?raw=true)
