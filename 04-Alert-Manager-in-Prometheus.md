@@ -67,3 +67,17 @@ then you just apply your secret that contains the email credetials:
 and apply the alert manager config
 
 `kubectl apply -f alert-manager-config.yaml`
+
+# Test Email Notification
+
+we are going to trigger the High CPU load condition and see the alert gets fired ==> simulate a CPU load in the cluster.
+
+This will similate a CPU test:
+
+`kubectl run cpu-test --image=containerstack/cpustress -- --cpu 4 --timeout 60s --metrics-brief`
+
+![Alt text](./images/alert-fired.png?raw=true)
+
+NOTE: don't forget to delete the pod at the end:
+
+`kubectl delete pod cpu-test`

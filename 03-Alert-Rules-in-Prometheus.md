@@ -127,3 +127,7 @@ This will similate a CPU test:
 `kubectl run cpu-test --image=containerstack/cpustress -- --cpu 4 --timeout 30s --metrics-brief`
 
 ![Alt text](./images/alert-pending.png?raw=true)
+
+NOTE: don't forget to delete the pod at the end:
+
+`kubectl delete pod cpu-test`
