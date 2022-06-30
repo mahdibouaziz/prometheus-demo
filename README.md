@@ -4,4 +4,4 @@
 
 # [03 - Alert Rules in Prometheus](./03-Alert-Rules-in-Prometheus.md)
 
-# [03 - Alert Manager in Prometheus](./04-Alert-Manager-in-Prometheus.md)
+# [04 - Alert Manager in Prometheus](./04-Alert-Manager-in-Prometheus.md)

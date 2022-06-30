@@ -66,6 +66,8 @@ We have Prometheus running in K8s cluster as `Prometheus Operator`.
 
 Prometheus Operator extends the K8s API and let us create `Custom Kuberentes Components` defined by `CRDs`.
 
+[https://docs.openshift.com/container-platform/4.8/rest_api/monitoring_apis/prometheusrule-monitoring-coreos-com-v1.html]
+
 ==> to add this alert rule to Prometheus, we just need to create the manifest file with the custom `apiVersion` and `kind` and just apply it.
 
 ```yaml
