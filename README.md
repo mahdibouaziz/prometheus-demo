@@ -9,3 +9,5 @@
 # [05 - Monitor Redis a Third Party Application](./05-Monitor-Redis-a-Third-Party-Application.md)
 
 # [06 - Monitor NodeJS Application](./06-Monitor-NodeJS-Application.md)
+
+# [07 - Prometheus Operator](./07-Prometheus-Operator.md)
