@@ -11,3 +11,15 @@
 # [06 - Monitor NodeJS Application](./06-Monitor-NodeJS-Application.md)
 
 # [07 - Prometheus Operator](./07-Prometheus-Operator.md)
+
+# Must Read
+
+https://blog.container-solutions.com/prometheus-operator-beginners-guide
+
+https://github.com/prometheus-operator/prometheus-operator
+
+https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/user-guides/getting-started.md
+
+https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/
+
+https://prometheus-operator.dev/docs/operator/design/
